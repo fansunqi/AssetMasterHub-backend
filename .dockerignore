@@ -1,0 +1,17 @@
+README.md
+.git
+.gitignore
+
+.gitlab-ci.yml
+
+**/.DS_Store
+
+**/__pycache__
+.pytest_cache
+
+**/migrations
+db.sqlite3
+
+.coverage
+coverage-reports
+xunit-reports

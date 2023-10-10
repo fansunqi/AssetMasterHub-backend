@@ -1,0 +1,21 @@
+django==4.1.3
+
+django-cors-headers
+pymysql
+mysqlclient==2.1.0
+
+pytest
+pytest-django
+coverage
+
+# TODO Start: [Student] Add dependency on uWSGI
+uwsgi
+# TODO End: [Student] Add dependency on uWSGI
+
+pytz
+djangorestframework
+opencv-python-headless
+pillow
+numpy
+MyQR
+oss2

@@ -1,0 +1,67 @@
+image: registry.secoder.net/tool/deployer
+
+stages:
+  - build
+  - test
+  - deploy
+
+build_master:
+  stage: build
+  script:
+    - export BUILD_IMAGE_NAME=$CI_REGISTRY_IMAGE
+    - export BUILD_IMAGE_TAG=$CI_COMMIT_REF_SLUG
+    - export BUILD_IMAGE_USERNAME=$CI_REGISTRY_USER
+    - export BUILD_IMAGE_PASSWORD=$CI_REGISTRY_PASSWORD
+    - deployer build
+
+  only:
+    - master
+
+build_others:
+  stage: build
+  script:
+    - export BUILD_IMAGE_NAME=$CI_REGISTRY_IMAGE
+    - export BUILD_IMAGE_TAG=$CI_COMMIT_REF_SLUG
+    - export BUILD_IMAGE_USERNAME=$CI_REGISTRY_USER
+    - export BUILD_IMAGE_PASSWORD=$CI_REGISTRY_PASSWORD
+    - deployer build
+
+  except:
+    - master
+
+unit-test:
+
+  image: python:3.9
+
+  stage: test
+  before_script:
+
+    - pip install -i https://pypi.tuna.tsinghua.edu.cn/simple -r requirements.txt
+
+  script:
+
+    - python3 manage.py makemigrations 
+    - python3 manage.py migrate
+    - sh ./test.sh
+
+  after_script:
+    - SUFFIX=$RANDOM
+    - curl "http://api.secoder.net/static/sonar-scanner.tar.gz" -s -o "/tmp/sonar-$SUFFIX.tar.gz"
+    - tar -xf "/tmp/sonar-$SUFFIX.tar.gz"  -C /opt
+    - /opt/sonar-scanner/bin/sonar-scanner
+
+    
+deploy_master:
+  stage: deploy
+  script:
+    - deployer dyno replace $CI_PROJECT_NAME $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG gitlab-ci-token $REGISTRY_PWD
+  only:
+    - master
+
+
+deploy_dev:
+  stage: deploy
+  script:
+    - deployer dyno replace CS-Company-backend-dev $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG gitlab-ci-token $REGISTRY_PWD
+  only:
+    - dev

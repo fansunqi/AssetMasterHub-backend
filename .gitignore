@@ -1,0 +1,7 @@
+__pycache__/
+db.sqlite3
+
+.coverage
+coverage-reports/
+xunit-reports/
+.pytest_cache/

@@ -1,0 +1,19 @@
+{
+    "folders": [
+        {
+            "path": ".."
+        },
+        {
+            "path": "../../helper"
+        },
+        {
+            "path": "../../2023-django-hw"
+        },
+        {
+            "path": "../../ReqMan-backend-dev"
+        },
+        {
+            "path": "../../CS-Company-frontend"
+        }
+    ]
+}
